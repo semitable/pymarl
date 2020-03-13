@@ -4,7 +4,7 @@ import collections
 from os.path import dirname, abspath
 from copy import deepcopy
 from sacred import Experiment, SETTINGS
-from sacred.observers import FileStorageObserver
+from sacred.observers import FileStorageObserver, MongoObserver
 from sacred.utils import apply_backspaces_and_linefeeds
 import sys
 import torch as th
@@ -31,6 +31,9 @@ def my_main(_run, _config, _log):
     th.manual_seed(config["seed"])
     config['env_args']['seed'] = config["seed"]
 
+    if config["env"] != "sc2":
+        config["env_args"]['key'] = config["env"]
+        config["env"] = "gymma"
     # run the framework
     run(_run, config, _log)
 
@@ -94,6 +97,7 @@ if __name__ == '__main__':
     logger.info("Saving to FileStorageObserver in results/sacred.")
     file_obs_path = os.path.join(results_path, "sacred")
     ex.observers.append(FileStorageObserver.create(file_obs_path))
+    ex.observers.append(MongoObserver())
 
     ex.run_commandline(params)
 

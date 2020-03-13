@@ -20,6 +20,7 @@ class Logger:
         self.use_tb = True
 
     def setup_sacred(self, sacred_run_dict):
+        self._run_obj = sacred_run_dict
         self.sacred_info = sacred_run_dict.info
         self.use_sacred = True
 
@@ -36,6 +37,8 @@ class Logger:
             else:
                 self.sacred_info["{}_T".format(key)] = [t]
                 self.sacred_info[key] = [value]
+            
+            self._run_obj.log_scalar(key, value, t)
 
     def print_recent_stats(self):
         log_str = "Recent Stats | t_env: {:>10} | Episode: {:>8}\n".format(*self.stats["episode"][-1])
