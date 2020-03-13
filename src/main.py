@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import random
 import collections
 from os.path import dirname, abspath
 from copy import deepcopy
@@ -31,7 +32,20 @@ def my_main(_run, _config, _log):
     th.manual_seed(config["seed"])
     config['env_args']['seed'] = config["seed"]
 
-    if config["env"] != "sc2":
+    if config["env"] == "sample":
+        envs = (
+            ("SimpleSpeakerListener-v0", 25),
+            ("RandomPreyTag-v0", 25),
+            ("SimpleSpread-v0", 25),
+        )
+        env, time_limit = random.choice(envs)
+
+        config["env_args"]['key'] = env
+        config["env_args"]['time_limit'] = time_limit
+        config["env"] = "gymma"
+    elif config["env"] == "sc2":
+        pass
+    else:
         config["env_args"]['key'] = config["env"]
         config["env"] = "gymma"
     # run the framework
@@ -97,7 +111,7 @@ if __name__ == '__main__':
     logger.info("Saving to FileStorageObserver in results/sacred.")
     file_obs_path = os.path.join(results_path, "sacred")
     ex.observers.append(FileStorageObserver.create(file_obs_path))
-    ex.observers.append(MongoObserver())
+    # ex.observers.append(MongoObserver())
 
     ex.run_commandline(params)
 

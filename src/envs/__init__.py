@@ -19,9 +19,9 @@ if sys.platform == "linux":
                           os.path.join(os.getcwd(), "3rdparty", "StarCraftII"))
 
 class _GymmaWrapper(MultiAgentEnv):
-    def __init__(self, key, **kwargs):
-        self.episode_limit = 25
-        self._env = TimeLimit(gym.make(f"gymma:{key}"), max_episode_steps=25)
+    def __init__(self, key, time_limit, **kwargs):
+        self.episode_limit = time_limit
+        self._env = TimeLimit(gym.make(f"gymma:{key}"), max_episode_steps=time_limit)
         self._env = FlattenObservation(self._env)
         self.n_agents = self._env.n_agents
         self._obs = None
