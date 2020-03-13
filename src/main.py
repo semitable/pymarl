@@ -32,22 +32,6 @@ def my_main(_run, _config, _log):
     th.manual_seed(config["seed"])
     config['env_args']['seed'] = config["seed"]
 
-    if config["env"] == "sample":
-        envs = (
-            ("SimpleSpeakerListener-v0", 25),
-            ("RandomPreyTag-v0", 25),
-            ("SimpleSpread-v0", 25),
-        )
-        env, time_limit = random.choice(envs)
-
-        config["env_args"]['key'] = env
-        config["env_args"]['time_limit'] = time_limit
-        config["env"] = "gymma"
-    elif config["env"] == "sc2":
-        pass
-    else:
-        config["env_args"]['key'] = config["env"]
-        config["env"] = "gymma"
     # run the framework
     run(_run, config, _log)
 
@@ -103,6 +87,25 @@ if __name__ == '__main__':
     # config_dict = {**config_dict, **env_config, **alg_config}
     config_dict = recursive_dict_update(config_dict, env_config)
     config_dict = recursive_dict_update(config_dict, alg_config)
+
+    if config_dict["env"] is None:
+        envs = (
+            ("SimpleSpeakerListener-v0", 25),
+            ("RandomPreyTag-v0", 25),
+            ("SimpleSpread-v0", 25),
+        )
+        env, time_limit = random.choice(envs)
+
+        config_dict["env_args"]['key'] = env
+        config_dict["env_args"]['time_limit'] = time_limit
+        config_dict["env"] = "gymma"
+    elif config_dict["env"] == "sc2":
+        pass
+    else:
+        config_dict["env_args"]['key'] = config_dict["env"]
+        config_dict["env"] = "gymma"
+
+    print(config_dict)
 
     # now add all the config to sacred
     ex.add_config(config_dict)
