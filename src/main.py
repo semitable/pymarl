@@ -21,8 +21,8 @@ ex = Experiment("pymarl")
 ex.logger = logger
 ex.captured_out_filter = apply_backspaces_and_linefeeds
 
-# results_path = os.path.join(dirname(dirname(abspath(__file__))), "results")
-results_path = "/home/ubuntu/data"
+results_path = os.path.join(dirname(dirname(abspath(__file__))), "results")
+# results_path = "/home/ubuntu/data"
 
 @ex.main
 def my_main(_run, _config, _log):
@@ -114,6 +114,7 @@ if __name__ == '__main__':
     # Save to disk by default for sacred
     logger.info("Saving to FileStorageObserver in results/sacred.")
     file_obs_path = os.path.join(results_path, "sacred")
+    ex.observers.append(MongoObserver(url='172.31.5.187:27017'))
     ex.observers.append(FileStorageObserver.create(file_obs_path))
     # ex.observers.append(MongoObserver())
 
