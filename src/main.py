@@ -91,9 +91,10 @@ if __name__ == '__main__':
 
     if config_dict["env"] is None:
         envs = (
-            ("SimpleSpeakerListener-v0", 25),
-            ("RandomPreyTag-v0", 25),
-            ("SimpleSpread-v0", 25),
+            ("Foraging-8x8-2p-3f-v0", 25),
+            # ("SimpleSpeakerListener-v0", 25),
+            # ("RandomPreyTag-v0", 25),
+            # ("SimpleSpread-v0", 25),
         )
         env, time_limit = random.choice(envs)
 
@@ -105,9 +106,9 @@ if __name__ == '__main__':
     else:
         config_dict["env_args"]['key'] = config_dict["env"]
         config_dict["env"] = "gymma"
-
+        
     print(config_dict)
-
+    
     # now add all the config to sacred
     ex.add_config(config_dict)
 
