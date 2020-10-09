@@ -25,6 +25,10 @@ class Logger:
         self.use_sacred = True
 
     def log_stat(self, key, value, t, to_sacred=True):
+        try:
+            value = value.item()
+        except:
+            pass
         self.stats[key].append((t, value))
 
         if self.use_tb:
